@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class MemberController {
 
@@ -29,12 +31,13 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    // 회원 웹 기능 - 등록
+    // 회원 웹 기능 - 등록(등록 화면 이동)
     @GetMapping("/members/new")
     public String createForm() {
         return "members/createMemberForm";
     }
 
+    // 회원 웹 기능 - 등록(회원 등록)
     @PostMapping("/members/new")
     public String create(MemberForm form) {
         Member member = new Member();
@@ -42,6 +45,15 @@ public class MemberController {
 
         memberService.join(member);
 
-        return "rediredct:/";
+        return "redirect:/";
+    }
+
+    // 회원 웹 기능 - 조회
+    @GetMapping("/members")
+    public String list(Model model) {
+        List<Member> members = memberService.findMembers();
+        model.addAttribute("members", members);
+
+        return "members/memberList";
     }
 }
